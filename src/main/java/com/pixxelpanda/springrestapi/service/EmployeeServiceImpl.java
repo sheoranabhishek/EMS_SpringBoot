@@ -23,16 +23,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getEmployees(int pageNumber , int pageSize) {
-        Pageable pages = PageRequest.of(pageNumber , pageSize , Sort.Direction.DESC , "id");
+        Pageable pages = PageRequest.of(pageNumber , pageSize , Sort.Direction.ASC , "id");
         return eRepository.findAll(pages).getContent();
     }
 
     @Override
     public Employee saveEmployee(Employee employee)
     {
-        String name = employee.getName();
-        name = name.replaceAll(" ", "_").toLowerCase();
-        employee.setName(name);
         return eRepository.save(employee);
     }
 

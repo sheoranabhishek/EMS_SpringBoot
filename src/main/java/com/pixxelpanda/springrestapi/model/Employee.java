@@ -19,15 +19,15 @@ import java.util.Date;
 @Entity
 @Table(name = "tbl_employees")
 public class Employee {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
 
-    @NotBlank(message = "Name should not be null.")
+    @NotBlank(message = "FirstName should not be null.")
     private String name;
-    private Long age = 0L;
+
+    private Integer age = 0;
     private String location;
 
     @Email(message = "Please enter the valid email address")
