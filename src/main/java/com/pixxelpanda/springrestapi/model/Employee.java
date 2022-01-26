@@ -1,6 +1,7 @@
 package com.pixxelpanda.springrestapi.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Setter
 @ToString
 @Entity
+@NoArgsConstructor
 @Table(name = "tbl_employees")
 public class Employee {
     @Id
@@ -34,8 +36,8 @@ public class Employee {
     @NotBlank(message = "Email should not be null.")
     private String email;
 
-    @NotBlank(message = "Department should not be null.")
-    private String department;
+    @ManyToOne
+    private Department dept;
 
     @UpdateTimestamp
     @Column (name = "updated_at")

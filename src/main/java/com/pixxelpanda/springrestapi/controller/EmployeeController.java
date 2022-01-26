@@ -1,17 +1,22 @@
 package com.pixxelpanda.springrestapi.controller;
 
+import com.pixxelpanda.springrestapi.model.Department;
 import com.pixxelpanda.springrestapi.model.Employee;
+import com.pixxelpanda.springrestapi.repository.DepartmentRepository;
+import com.pixxelpanda.springrestapi.repository.EmployeeRepository;
+import com.pixxelpanda.springrestapi.request.EmployeeRequest;
+import com.pixxelpanda.springrestapi.response.EmployeeResponse;
+import com.pixxelpanda.springrestapi.service.DepartmentService;
 import com.pixxelpanda.springrestapi.service.EmployeeService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController // @Controller + @ResponseBody
 @RequestMapping("/api/v1")
@@ -20,9 +25,29 @@ public class EmployeeController {
     @Autowired
     private EmployeeService eService;
 
+    @Autowired
+    private DepartmentService dService;
+
     @GetMapping("/employees")
-    public ResponseEntity<List<Employee>> getEmployees(@RequestParam int pNum , int pSize){
-        return new ResponseEntity<List<Employee>>(eService.getEmployees(pNum , pSize) ,HttpStatus.OK);
+    public ResponseEntity<List<EmployeeResponse>> getEmployees(@RequestParam Optional<Integer> pNum , Optional<Integer> pSize){
+//        if( !pNum.isPresent() || !pSize.isPresent()  )
+//            return new ResponseEntity<List<EmployeeRes>>(eService.getEmployees() ,HttpStatus.OK);
+//        else
+//            return new ResponseEntity<List<Employee>>(eService.getEmployees(pNum , pSize) ,HttpStatus.OK);
+        List<EmployeeResponse> list = new ArrayList<>();
+        eService.getEmployees().forEach(e -> {
+            EmployeeResponse eResponse = new EmployeeResponse();
+            eResponse.setEmployeeName(e.getName());
+            eResponse.setId(e.getId());
+            eResponse.setAge(e.getAge());
+            eResponse.setDepartment(e.getDept().getDeptName());
+            eResponse.setEmail(e.getEmail());
+            eResponse.setLocation(e.getLocation());
+
+            list.add(eResponse);
+        });
+
+        return new ResponseEntity<List<EmployeeResponse>>(list , HttpStatus.OK);
     }
 
     @GetMapping("/employees/{id}")
@@ -32,8 +57,35 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee){
-        return new ResponseEntity<Employee>(eService.saveEmployee(employee), HttpStatus.CREATED);
+    public ResponseEntity<HttpStatus> saveEmployee(@Valid @RequestBody EmployeeRequest eRequest) throws Exception {
+
+        //check if the department exists or not
+
+        Department dept = dService.getDepartmentByName(eRequest.getDepartmentName());
+        if( dept == null)
+        {
+            throw new Exception("The department you specified , doesn't exist.");
+        }
+
+        //otherwise , create a employee out of the request
+        Employee emp = new Employee();
+        emp.setDept(dept);
+        emp.setAge(eRequest.getAge());
+        emp.setEmail(eRequest.getEmail());
+        emp.setLocation(eRequest.getLocation());
+        emp.setName(eRequest.getEmployeeName());
+
+        //saving the employee
+        emp = eService.saveEmployee(emp);
+
+        //push the employee to dept list
+        List<Employee> list = dept.getEmployees();
+        list.add(emp);
+        dept.setEmployees(list);
+
+        dService.saveDepartment(dept);
+
+        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }
 
     @PutMapping("/employees/{id}")
@@ -49,24 +101,5 @@ public class EmployeeController {
         eService.deleteEmployee(id);
         return new ResponseEntity<HttpStatus>( HttpStatus.NO_CONTENT);
     }
-
-    @RequestMapping(value = "/employees/filter" , params = {"name"})
-    public ResponseEntity<List<Employee>> getEmployeesByName(@RequestParam String name)
-    {
-        return new ResponseEntity<List<Employee>>(eService.getEmployeesByName(name) , HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/employees/filter" , params = {"name" , "location"})
-    public ResponseEntity<List<Employee>> getEmployeesByNameAndLocation( @RequestParam String name , String location)
-    {
-        return new ResponseEntity<List<Employee>>(eService.getEmployeeByNameAndLocation(name , location) , HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/employees/filter" , params = {"keyword"})
-    public ResponseEntity<List<Employee>> getEmployeeByKeyword(@RequestParam String keyword)
-    {
-        return new ResponseEntity<List<Employee>>(eService.getEmployeeByKeyword(keyword) , HttpStatus.OK);
-    }
-
 
 }

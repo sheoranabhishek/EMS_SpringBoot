@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PageController {
@@ -25,11 +26,9 @@ public class PageController {
     private EmployeeService eService;
 
     @GetMapping("/")
-    public ModelAndView getHome(@RequestParam(value = "pNum" , defaultValue = "0")  int pNum , @RequestParam(value = "pSize", defaultValue = "20") int pSize)
+    public ModelAndView getHome(@RequestParam(value = "pNum") Optional<Integer> pNum ,  Optional<Integer> pSize)
     {
-        //make a call to the api
-        System.out.println("Query for page no." + pNum + "page size " + pSize);
-        List<Employee> list = eService.getEmployees(pNum , pSize);
+        List<Employee> list =  eService.getEmployees(pNum , pSize);
         ModelAndView mav = new ModelAndView("employees");
         mav.addObject("emps" , list);
         return mav;

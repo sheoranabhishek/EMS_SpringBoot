@@ -32,13 +32,13 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             System.out.println(csvParser.getRecordNumber() + "Records are being inserted.");
             for (CSVRecord csvRecord : csvRecords) {
-                Employee e = new Employee();
-                e.setName(csvRecord.get("name"));
-                e.setEmail(csvRecord.get("email"));
-                e.setLocation(csvRecord.get("location"));
-                e.setDepartment(csvRecord.get("department"));
-                e.setAge(Integer.parseInt(csvRecord.get("age")));
-                list.add(e);
+//                Employee e = new Employee();
+//                e.setName(csvRecord.get("name"));
+//                e.setEmail(csvRecord.get("email"));
+//                e.setLocation(csvRecord.get("location"));
+//                e.setDepartment(csvRecord.get("department"));
+//                e.setAge(Integer.parseInt(csvRecord.get("age")));
+//                list.add(e);
             }
             return list;
         } catch (Exception e) {

@@ -22,8 +22,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository eRepository;
 
     @Override
-    public List<Employee> getEmployees(int pageNumber , int pageSize) {
-        Pageable pages = PageRequest.of(pageNumber , pageSize , Sort.Direction.ASC , "id");
+    public List<Employee> getEmployees() {
+        return (List<Employee>) eRepository.findAll();
+    }
+
+
+    @Override
+    public List<Employee> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize) {
+        Pageable pages = PageRequest.of(pageNumber.get() , pageSize.get() , Sort.Direction.ASC , "id");
         return eRepository.findAll(pages).getContent();
     }
 
@@ -63,6 +69,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getEmployeeByNameAndLocation( String name , String location)
     {
         return eRepository.findByNameAndLocation(name , location);
+    }
+
+    @Override
+    public List<Employee> getEmployeeByNameOrLocation( String name , String location)
+    {
+        System.out.println(name + location);
+        return eRepository.findByNameOrLocation(name , location);
     }
 
     @Override
