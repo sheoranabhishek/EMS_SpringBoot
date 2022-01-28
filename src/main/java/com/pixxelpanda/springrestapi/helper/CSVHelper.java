@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVHelper {
-    public static String TYPE = "text/csv";
+    public String TYPE = "text/csv";
     
     @Autowired
     private DepartmentService dService;
 
 
-    public static boolean hasCSVFormat(MultipartFile file) {
+    public boolean hasCSVFormat(MultipartFile file) {
 
         if (!TYPE.equals(file.getContentType())) {
             return false;
