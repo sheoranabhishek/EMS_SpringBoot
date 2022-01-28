@@ -31,7 +31,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department getDepartmentByName(String deptName)
     {
         //find by name
+        System.out.println(deptName);
         return dRepository.getDepartmentByName(deptName);
+    }
+
+    @Override
+    public Department getDepartmentById(Long id) {
+        return dRepository.getById(id);
     }
 
 }

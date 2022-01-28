@@ -1,9 +1,12 @@
 package com.pixxelpanda.springrestapi.helper;
 
+import com.pixxelpanda.springrestapi.model.Department;
 import com.pixxelpanda.springrestapi.model.Employee;
+import com.pixxelpanda.springrestapi.service.DepartmentService;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -14,6 +17,10 @@ import java.util.List;
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
+    
+    @Autowired
+    private DepartmentService dService;
+
 
     public static boolean hasCSVFormat(MultipartFile file) {
 
@@ -24,7 +31,7 @@ public class CSVHelper {
         return true;
     }
 
-    public static List<Employee> csvToDb(InputStream is) {
+    public List<Employee> csvToDb(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
             CSVParser csvParser = new CSVParser(fileReader,CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
@@ -32,13 +39,21 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             System.out.println(csvParser.getRecordNumber() + "Records are being inserted.");
             for (CSVRecord csvRecord : csvRecords) {
-//                Employee e = new Employee();
-//                e.setName(csvRecord.get("name"));
-//                e.setEmail(csvRecord.get("email"));
-//                e.setLocation(csvRecord.get("location"));
-//                e.setDepartment(csvRecord.get("department"));
-//                e.setAge(Integer.parseInt(csvRecord.get("age")));
-//                list.add(e);
+                String deptName = csvRecord.get("department");
+                Department d = dService.getDepartmentByName(deptName);
+                if( d == null)
+                {
+                    throw new RuntimeException("The department name inside CSV , doesn't match any.");
+                }
+                
+                Employee e = new Employee();
+                e.setName(csvRecord.get("name"));
+                e.setEmail(csvRecord.get("email"));
+                e.setLocation(csvRecord.get("location"));
+                e.setDept(d);
+                e.setAge(Integer.parseInt(csvRecord.get("age")));
+                System.out.println(e.toString());
+                list.add(e);
             }
             return list;
         } catch (Exception e) {

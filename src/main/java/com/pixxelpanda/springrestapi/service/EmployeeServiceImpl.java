@@ -2,6 +2,7 @@ package com.pixxelpanda.springrestapi.service;
 
 import com.pixxelpanda.springrestapi.model.Employee;
 import com.pixxelpanda.springrestapi.repository.EmployeeRepository;
+import com.pixxelpanda.springrestapi.response.EmployeeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,15 +23,34 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository eRepository;
 
     @Override
-    public List<Employee> getEmployees() {
-        return (List<Employee>) eRepository.findAll();
-    }
+    public List<EmployeeResponse> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize) {
 
+        List<EmployeeResponse> list = new ArrayList<>();
+        List<Employee> dbList;
+        if(pageNumber.isPresent() && pageSize.isPresent())
+        {
+            //we do the paging.
+            Pageable pages = PageRequest.of(pageNumber.get() , pageSize.get() , Sort.Direction.ASC , "id");
+            dbList = eRepository.findAll(pages).getContent();
+        }
+        else
+        {
+            dbList = (List<Employee>) eRepository.findAll();
+        }
 
-    @Override
-    public List<Employee> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize) {
-        Pageable pages = PageRequest.of(pageNumber.get() , pageSize.get() , Sort.Direction.ASC , "id");
-        return eRepository.findAll(pages).getContent();
+        dbList.forEach(e -> {
+            EmployeeResponse eResponse = new EmployeeResponse();
+            eResponse.setEmployeeName(e.getName());
+            eResponse.setId(e.getId());
+            eResponse.setAge(e.getAge());
+            eResponse.setDepartment(e.getDept().getDeptName());
+            eResponse.setEmail(e.getEmail());
+            eResponse.setLocation(e.getLocation());
+
+            list.add(eResponse);
+        });
+
+        return list;
     }
 
     @Override

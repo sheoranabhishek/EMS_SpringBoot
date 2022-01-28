@@ -1,14 +1,14 @@
 package com.pixxelpanda.springrestapi.service;
 
 import com.pixxelpanda.springrestapi.model.Employee;
+import com.pixxelpanda.springrestapi.response.EmployeeResponse;
 
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
-    List<Employee> getEmployees();
-    List<Employee> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize);
+    List<EmployeeResponse> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize);
     Employee saveEmployee(Employee employee);
     Employee getSingleEmployee(Long id);
     void deleteEmployee(Long id);
