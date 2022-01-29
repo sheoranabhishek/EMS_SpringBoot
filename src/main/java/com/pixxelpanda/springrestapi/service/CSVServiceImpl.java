@@ -4,8 +4,6 @@ import com.pixxelpanda.springrestapi.helper.CSVHelper;
 import com.pixxelpanda.springrestapi.model.Employee;
 import com.pixxelpanda.springrestapi.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,8 +17,8 @@ public class CSVServiceImpl implements CSVService{
 
         public void save(MultipartFile file) {
             try {
-                List<Employee> list = CSVHelper.csvToDb(file.getInputStream());
-                eRepository.saveAll(list);
+                CSVHelper.csvToDb(file.getInputStream());
+//                eRepository.saveAll(list);
             } catch (Exception e) {
                 throw new RuntimeException("fail to store csv data");
             }

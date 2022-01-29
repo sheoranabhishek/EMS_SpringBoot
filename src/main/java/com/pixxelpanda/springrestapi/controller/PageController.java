@@ -1,6 +1,7 @@
 package com.pixxelpanda.springrestapi.controller;
 
 import com.pixxelpanda.springrestapi.model.Employee;
+import com.pixxelpanda.springrestapi.response.EmployeeResponse;
 import com.pixxelpanda.springrestapi.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class PageController {
     @GetMapping("/")
     public ModelAndView getHome(@RequestParam(value = "pNum") Optional<Integer> pNum ,  Optional<Integer> pSize)
     {
-        List<Employee> list =  eService.getEmployees(pNum , pSize);
+        List<EmployeeResponse> list =  eService.getEmployees(pNum , pSize);
         ModelAndView mav = new ModelAndView("employees");
         mav.addObject("emps" , list);
         return mav;

@@ -30,24 +30,7 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public ResponseEntity<List<EmployeeResponse>> getEmployees(@RequestParam Optional<Integer> pNum , Optional<Integer> pSize){
-//        if( !pNum.isPresent() || !pSize.isPresent()  )
-//            return new ResponseEntity<List<EmployeeRes>>(eService.getEmployees() ,HttpStatus.OK);
-//        else
-//            return new ResponseEntity<List<Employee>>(eService.getEmployees(pNum , pSize) ,HttpStatus.OK);
-        List<EmployeeResponse> list = new ArrayList<>();
-        eService.getEmployees().forEach(e -> {
-            EmployeeResponse eResponse = new EmployeeResponse();
-            eResponse.setEmployeeName(e.getName());
-            eResponse.setId(e.getId());
-            eResponse.setAge(e.getAge());
-            eResponse.setDepartment(e.getDept().getDeptName());
-            eResponse.setEmail(e.getEmail());
-            eResponse.setLocation(e.getLocation());
-
-            list.add(eResponse);
-        });
-
-        return new ResponseEntity<List<EmployeeResponse>>(list , HttpStatus.OK);
+            return new ResponseEntity<List<EmployeeResponse>>(eService.getEmployees(pNum , pSize) ,HttpStatus.OK);
     }
 
     @GetMapping("/employees/{id}")
@@ -77,13 +60,6 @@ public class EmployeeController {
 
         //saving the employee
         emp = eService.saveEmployee(emp);
-
-        //push the employee to dept list
-        List<Employee> list = dept.getEmployees();
-        list.add(emp);
-        dept.setEmployees(list);
-
-        dService.saveDepartment(dept);
 
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }

@@ -22,7 +22,4 @@ public class Department {
     @NotBlank(message = "deptName should not be null.")
     private String deptName;
 
-    @OneToMany(mappedBy = "dept")
-    private List<Employee> employees;
-
 }

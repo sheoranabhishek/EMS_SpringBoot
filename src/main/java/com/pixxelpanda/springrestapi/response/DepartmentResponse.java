@@ -15,5 +15,4 @@ import java.util.Map;
 public class DepartmentResponse {
     private Long id;
     private String deptName;
-    private List<String> empList = new ArrayList<>();
 }
