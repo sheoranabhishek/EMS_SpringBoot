@@ -20,7 +20,6 @@ public class Department {
     private Long id;
 
     @NotBlank(message = "deptName should not be null.")
-    @Column(name = "name")
     private String deptName;
 
 }

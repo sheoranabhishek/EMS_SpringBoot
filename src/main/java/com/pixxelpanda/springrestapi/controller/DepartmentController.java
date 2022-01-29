@@ -1,6 +1,7 @@
 package com.pixxelpanda.springrestapi.controller;
 import com.pixxelpanda.springrestapi.model.Department;
 import com.pixxelpanda.springrestapi.model.Employee;
+import com.pixxelpanda.springrestapi.request.DepartmentRequest;
 import com.pixxelpanda.springrestapi.response.DepartmentResponse;
 import com.pixxelpanda.springrestapi.service.DepartmentService;
 import org.apache.coyote.Response;
@@ -43,20 +44,26 @@ public class DepartmentController {
     {
         return new ResponseEntity<Department>( dService.saveDepartment(dept) , HttpStatus.CREATED);
     }
-//
-//    @PutMapping("/department/{id}")
-//    public ResponseEntity<DepartmentResponse> updateDepartment( @RequestParam Long id ,  @RequestBody DepartmentRequest dept)
-//    {
-//        //find the id of the department
-//        Department d = dService.getDepartmentById(id);
-//        if( d == null)
-//        {
-//            throw new RuntimeException("The department with this id" + id +  "doesn't exist.");
-//        }
-//
-//        //found the department , now , we will update the details.
-//        Department d =
-//
-//    }
+
+    @PutMapping("/department/{id}")
+    public ResponseEntity<DepartmentResponse> updateDepartment( @PathVariable Long id ,  @RequestBody DepartmentRequest dept)
+    {
+        //find the id of the department
+        Department d = new Department();
+        d.setId(id);
+        d.setDeptName(dept.getDepartmentName());
+        dService.saveDepartment(d);
+        DepartmentResponse dResponse = new DepartmentResponse();
+        dResponse.setId(id);
+        dResponse.setDeptName(dept.getDepartmentName());
+        return new ResponseEntity<DepartmentResponse>(dResponse , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/department/{id}")
+    public ResponseEntity<HttpStatus> deleteDepartment(@PathVariable Long id )
+    {
+        dService.deleteDepartment(id);
+        return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+    }
 
 }

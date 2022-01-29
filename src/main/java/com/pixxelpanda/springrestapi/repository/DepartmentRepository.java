@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
-    @Query("from Department WHERE dept_name = :deptName")
+    @Query("from Department WHERE deptName = :deptName")
     Department getDepartmentByName(String deptName);
 }

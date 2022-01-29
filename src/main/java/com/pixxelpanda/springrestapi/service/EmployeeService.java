@@ -2,6 +2,7 @@ package com.pixxelpanda.springrestapi.service;
 
 import com.pixxelpanda.springrestapi.model.Employee;
 import com.pixxelpanda.springrestapi.response.EmployeeResponse;
+import org.apache.commons.csv.CSVRecord;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -17,4 +18,5 @@ public interface EmployeeService {
     List<Employee> getEmployeeByNameAndLocation( String name , String location);
     List<Employee> getEmployeeByNameOrLocation( String name , String location);
     List<Employee> getEmployeeByKeyword(String name );
+    void saveCSVtoDB(Iterable<CSVRecord> cv);
 }

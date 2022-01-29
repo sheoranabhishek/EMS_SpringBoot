@@ -1,14 +1,17 @@
 package com.pixxelpanda.springrestapi.service;
 
+import com.pixxelpanda.springrestapi.model.Department;
 import com.pixxelpanda.springrestapi.model.Employee;
 import com.pixxelpanda.springrestapi.repository.EmployeeRepository;
 import com.pixxelpanda.springrestapi.response.EmployeeResponse;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -21,6 +24,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeRepository eRepository;
+
+    @Autowired
+    private DepartmentService dService;
 
     @Override
     public List<EmployeeResponse> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize) {
@@ -103,6 +109,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     {
         Sort sort = Sort.by(Sort.Direction.DESC , "id");
         return eRepository.findByNameContaining(keyword , sort);
+    }
+
+    @Override
+    @Transactional
+    public void saveCSVtoDB(Iterable<CSVRecord> csvRecords)
+    {
+        for (CSVRecord csvRecord : csvRecords) {
+            String deptName = csvRecord.get("department");
+            Department d = dService.getDepartmentByName(deptName);
+            if( d == null) {
+                throw new RuntimeException("The department name inside CSV , doesn't match any.");
+            }
+            Employee e = new Employee();
+            e.setName(csvRecord.get("name"));
+            e.setEmail(csvRecord.get("email"));
+            e.setLocation(csvRecord.get("location"));
+            e.setDept(d);
+            e.setAge(Integer.parseInt(csvRecord.get("age")));
+            System.out.println(e.toString());
+            eRepository.save(e);
+        }
     }
 
 

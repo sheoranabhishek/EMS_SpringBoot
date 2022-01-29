@@ -17,8 +17,8 @@ public class CSVServiceImpl implements CSVService{
 
         public void save(MultipartFile file) {
             try {
-                List<Employee> list = CSVHelper.csvToDb(file.getInputStream());
-                eRepository.saveAll(list);
+                CSVHelper.csvToDb(file.getInputStream());
+//                eRepository.saveAll(list);
             } catch (Exception e) {
                 throw new RuntimeException("fail to store csv data");
             }
