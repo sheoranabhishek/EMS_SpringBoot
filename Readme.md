@@ -32,6 +32,7 @@ Don't forget to give the project a star! Thanks again!
 4. Pagination Added
 5. Relationship Modelling Done
 6. CSV Reader Functionality Added.
+7. @Transactional used for transaction of reading csv and storing to db.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
