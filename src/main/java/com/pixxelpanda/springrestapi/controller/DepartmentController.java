@@ -7,6 +7,9 @@ import com.pixxelpanda.springrestapi.service.DepartmentService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +40,12 @@ public class DepartmentController {
         });
 
         return new ResponseEntity<List<DepartmentResponse>>( dResponse , HttpStatus.OK);
+    }
+
+    @GetMapping("/department/{id}")
+    public ResponseEntity<Department> getDepartmentById(@PathVariable Long id)
+    {
+        return new ResponseEntity<Department>(dService.getDepartmentById(id) , HttpStatus.OK);
     }
 
     @PostMapping("/department")

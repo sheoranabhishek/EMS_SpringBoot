@@ -27,9 +27,9 @@ public class PageController {
     private EmployeeService eService;
 
     @GetMapping("/")
-    public ModelAndView getHome(@RequestParam(value = "pNum") Optional<Integer> pNum ,  Optional<Integer> pSize)
+    public ModelAndView getHome( )
     {
-        List<EmployeeResponse> list =  eService.getEmployees(pNum , pSize);
+        List<Employee> list =  eService.getEmployees();
         ModelAndView mav = new ModelAndView("employees");
         mav.addObject("emps" , list);
         return mav;

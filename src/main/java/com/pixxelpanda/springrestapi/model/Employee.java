@@ -1,9 +1,6 @@
 package com.pixxelpanda.springrestapi.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -20,6 +17,7 @@ import java.util.Date;
 @ToString
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tbl_employees")
 public class Employee {
     @Id
@@ -41,11 +39,4 @@ public class Employee {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Department dept;
 
-    @UpdateTimestamp
-    @Column (name = "updated_at")
-    private Date updatedAt;
-
-    @CreationTimestamp
-    @Column (name = "created_at" , nullable = false , updatable = false)
-    private Date createdAt;
 }

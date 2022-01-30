@@ -29,34 +29,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     private DepartmentService dService;
 
     @Override
-    public List<EmployeeResponse> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize) {
-
-        List<EmployeeResponse> list = new ArrayList<>();
+    public List<Employee> getEmployees() {
         List<Employee> dbList;
-        if(pageNumber.isPresent() && pageSize.isPresent())
-        {
-            //we do the paging.
-            Pageable pages = PageRequest.of(pageNumber.get() , pageSize.get() , Sort.Direction.ASC , "id");
-            dbList = eRepository.findAll(pages).getContent();
-        }
-        else
-        {
-            dbList = (List<Employee>) eRepository.findAll();
-        }
-
-        dbList.forEach(e -> {
-            EmployeeResponse eResponse = new EmployeeResponse();
-            eResponse.setEmployeeName(e.getName());
-            eResponse.setId(e.getId());
-            eResponse.setAge(e.getAge());
-            eResponse.setDepartment(e.getDept().getDeptName());
-            eResponse.setEmail(e.getEmail());
-            eResponse.setLocation(e.getLocation());
-
-            list.add(eResponse);
-        });
-
-        return list;
+        dbList = (List<Employee>) eRepository.findAll();
+        System.out.println("Getting Data from DB" + dbList);
+        return dbList;
     }
 
     @Override
@@ -132,5 +109,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    public List<Employee> getEmployeesByDept(String dept)
+    {
+        //sending the dept id;
+        Department d = dService.getDepartmentByName(dept);
+        return eRepository.findByDepartment(d.getId());
+    }
 
 }

@@ -32,6 +32,12 @@ public class FilterController {
             return new ResponseEntity<List<Employee>>(eService.getEmployeesByName(name) , HttpStatus.OK);
         }
 
+            @RequestMapping(value = "/employees/filter" , params = {"dept"})
+            public ResponseEntity<List<Employee>> getEmployeesByDept(@RequestParam String dept)
+            {
+                return new ResponseEntity<List<Employee>>(eService.getEmployeesByDept(dept) , HttpStatus.OK);
+            }
+
 
 
         //get employee with the name and location /employees/filer?name="..."&location="..."

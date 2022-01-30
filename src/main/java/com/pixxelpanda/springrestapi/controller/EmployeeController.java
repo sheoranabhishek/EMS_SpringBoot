@@ -29,8 +29,8 @@ public class EmployeeController {
     private DepartmentService dService;
 
     @GetMapping("/employees")
-    public ResponseEntity<List<EmployeeResponse>> getEmployees(@RequestParam Optional<Integer> pNum , Optional<Integer> pSize){
-            return new ResponseEntity<List<EmployeeResponse>>(eService.getEmployees(pNum , pSize) ,HttpStatus.OK);
+    public ResponseEntity<List<Employee>> getEmployees(){
+            return new ResponseEntity<List<Employee>>(eService.getEmployees() ,HttpStatus.OK);
     }
 
     @GetMapping("/employees/{id}")

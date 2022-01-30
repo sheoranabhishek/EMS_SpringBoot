@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
-    List<EmployeeResponse> getEmployees(Optional<Integer> pageNumber , Optional<Integer> pageSize);
+    List<Employee> getEmployees();
     Employee saveEmployee(Employee employee);
     Employee getSingleEmployee(Long id);
     void deleteEmployee(Long id);
@@ -18,5 +18,6 @@ public interface EmployeeService {
     List<Employee> getEmployeeByNameAndLocation( String name , String location);
     List<Employee> getEmployeeByNameOrLocation( String name , String location);
     List<Employee> getEmployeeByKeyword(String name );
+    List<Employee> getEmployeesByDept(String dept);
     void saveCSVtoDB(Iterable<CSVRecord> cv);
 }

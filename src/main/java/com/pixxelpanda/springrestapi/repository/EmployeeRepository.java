@@ -18,5 +18,7 @@ public interface EmployeeRepository extends PagingAndSortingRepository<Employee,
     //select * from table where name LIKE "%ram%"
     List<Employee> findByNameContaining(String keyword , Sort sort);
 
+    @Query("FROM Employee where dept_id = :id")
+    List<Employee> findByDepartment(Long id);
 
 }
