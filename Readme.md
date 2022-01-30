@@ -33,6 +33,7 @@ Don't forget to give the project a star! Thanks again!
 5. Relationship Modelling Done
 6. CSV Reader Functionality Added.
 7. @Transactional used for transaction of reading csv and storing to db.
+8. Redis Caching enabled on Departments table.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
