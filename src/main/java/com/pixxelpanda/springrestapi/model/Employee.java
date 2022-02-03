@@ -18,6 +18,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "tbl_employees")
 public class Employee {
     @Id

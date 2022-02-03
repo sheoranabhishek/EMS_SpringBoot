@@ -1,22 +1,14 @@
 package com.pixxelpanda.springrestapi.controller;
 import com.pixxelpanda.springrestapi.model.Department;
-import com.pixxelpanda.springrestapi.model.Employee;
 import com.pixxelpanda.springrestapi.request.DepartmentRequest;
-import com.pixxelpanda.springrestapi.response.DepartmentResponse;
 import com.pixxelpanda.springrestapi.service.DepartmentService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,19 +19,11 @@ public class DepartmentController {
     private DepartmentService dService;
 
     @GetMapping("/department")
-    public ResponseEntity<List<DepartmentResponse>> getDepartments()
+    public ResponseEntity<List<Department>> getDepartments()
     {
         List<Department> list = dService.getAllDepartments();
-        List<DepartmentResponse> dResponse = new ArrayList<>();
-
-        list.forEach( d->{
-            DepartmentResponse dept = new DepartmentResponse();
-            dept.setDeptName(d.getDeptName());
-            dept.setId(d.getId());
-            dResponse.add(dept);
-        });
-
-        return new ResponseEntity<List<DepartmentResponse>>( dResponse , HttpStatus.OK);
+        System.out.println(list);
+        return new ResponseEntity<List<Department>>( list , HttpStatus.OK);
     }
 
     @GetMapping("/department/{id}")
@@ -49,23 +33,22 @@ public class DepartmentController {
     }
 
     @PostMapping("/department")
-    public ResponseEntity<Department> saveDepartment(@Valid @RequestBody Department dept)
+    public Department saveDepartment(@Valid @RequestBody Department dept)
     {
-        return new ResponseEntity<Department>( dService.saveDepartment(dept) , HttpStatus.CREATED);
+        System.out.println(dept);
+        dept = dService.saveDepartment(dept);
+        return dept;
     }
 
     @PutMapping("/department/{id}")
-    public ResponseEntity<DepartmentResponse> updateDepartment( @PathVariable Long id ,  @RequestBody DepartmentRequest dept)
+    public Department updateDepartment( @PathVariable Long id ,  @RequestBody DepartmentRequest dept)
     {
         //find the id of the department
         Department d = new Department();
         d.setId(id);
         d.setDeptName(dept.getDepartmentName());
-        dService.saveDepartment(d);
-        DepartmentResponse dResponse = new DepartmentResponse();
-        dResponse.setId(id);
-        dResponse.setDeptName(dept.getDepartmentName());
-        return new ResponseEntity<DepartmentResponse>(dResponse , HttpStatus.OK);
+        d = dService.saveDepartment(d);
+        return d;
     }
 
     @DeleteMapping("/department/{id}")
